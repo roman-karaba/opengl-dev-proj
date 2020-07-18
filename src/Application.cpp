@@ -28,7 +28,7 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    // array of values representing points in 2D (x,y)
+    // array of values representing points/"vertecies" in 2D (x,y)
     float positions[6] = {
         -0.5f, -0.5f,
         0.0f, 0.5f,
@@ -51,6 +51,19 @@ int main(void)
     // GL_STATIC_DRAW is a "hint" to the gpu on how to treat the buffer, static -> doesnt update much
     glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
 
+
+    // specify the memory layout for the data structure
+    // (index_of_attribute, component_count_or_size, type_of_data, should_normalize?,
+    //  stride_number_of_bytes_between_elements, size_of_the_whole_vertex_in_bytes)
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+                          sizeof(float) * 2, 0); // no attributes on vertex so 0
+    
+    // enable the vertexAttributeArray
+    glEnableVertexAttribArray(0);
+
+   
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
