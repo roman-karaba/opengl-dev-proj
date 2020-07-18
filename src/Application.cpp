@@ -28,6 +28,29 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
+    // array of values representing points in 2D (x,y)
+    float positions[6] = {
+        -0.5f, -0.5f,
+        0.0f, 0.5f,
+        0.5f, -0.5f
+    };
+
+    // create a variable for our buffer
+    unsigned int buffer;
+    // request a number of buffers, and generate the ids at the address,
+    // of our buffer variable: 
+    // (how_many_buffers = 1, bufferId || &our_buffer_variable) // & ... memory address
+    glGenBuffers(1, &buffer);
+
+    // bind the buffer (id) to a buffer structure, Array
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+
+    // manually fill the buffer with vertex data, array analogy:
+    // arr[0] = {x0, y0}; arr[1] = {x1, y1}; arr[2] = {x2, y2}; 
+    // 6 comes from the length of the positions array
+    // GL_STATIC_DRAW is a "hint" to the gpu on how to treat the buffer, static -> doesnt update much
+    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
+
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -35,11 +58,8 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glBegin(GL_TRIANGLES);
-        glVertex2f(-0.5f, -0.5f);
-        glVertex2f(0.0f, 0.5f);
-        glVertex2f(0.5f, -0.5f);
-        glEnd();
+        // (draw_what, starting_index, how_many)
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
